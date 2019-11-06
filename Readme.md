@@ -70,7 +70,9 @@ search
 
 ```
 Search results for "Tobi dollars":
-  - Tobi wants four dollars
+[
+  { name: 'Tobi wants four dollars' }
+]
 ```
 
  We can tweak the query to perform a union by passing either "union" or "or" to `Search#type()` in `redslight.search()` between `Search#query()` and `Search#end()`, indicating that _any_ of the constants computed may be present for the `id` to match.
@@ -89,9 +91,12 @@ search
 
 ```
 Search results for "tobi dollars":
-  - Tobi wants four dollars
-  - Tobi only wants $4
-  - Loki, Jane, and Tobi are ferrets
+```js
+[
+  { name: 'Tobi wants four dollars' },
+  { name: 'Tobi only wants $4' },
+  { name: 'Loki, Jane, and Tobi are ferrets' }
+]
 ```
 
 RediSearch has an advanced query syntax that can be used by using the 'direct' search type. See the [RediSearch documentation](http://redisearch.io/Query_Syntax/) for this syntax.
@@ -184,9 +189,9 @@ Suggestion#del(str,fn)
 
 ```js
 redslight.createSearch('pets', schema, {}, function(err, search) {
-  search.index('dog', { name: 'Tobbi' });
+  search.index('dog', { name: 'Tobi' });
   search.remove('dog');
-  search.query('Tobbi').end(function (err, resp) {});
+  search.query('Tobi').end(function (err, resp) {});
 });
 ```
 
