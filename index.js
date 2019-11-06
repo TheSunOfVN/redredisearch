@@ -1,2 +1,2 @@
 
-module.exports = require('./lib/redredisearch.js');
+module.exports = require('./lib/redslight.js');
