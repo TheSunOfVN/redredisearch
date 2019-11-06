@@ -2,7 +2,7 @@ const
   argv      = require('yargs')                                    // command line handling
               .demand('connection')                               // require the 'connection' argument (this is a node_redis connection object in JSON Format)
               .argv,
-  redsearch = require('../'),                                     // RedRediSearch, syntax compatible with Reds
+  redsearch = require('../'),                                     // redslight, syntax compatible with Reds
   redis     = require('redis'),                                   // node_redis module
   request   = require('request'),                                 // Get a remote URL
   creds     = require(argv.connection),                           // load the JSON specified in the argument

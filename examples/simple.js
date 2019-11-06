@@ -3,7 +3,7 @@ const
               .demand('connection')                               // require the 'connection' argument
               .demand('query')                                    // the query we'll run against the indexed values
               .argv,
-  redsearch = require('../'),                                     // RedRediSearch, syntax compatible with Reds
+  redsearch = require('../'),                                     // redslight, syntax compatible with Reds
   redis     = require('redis'),                                   // node_redis module
   creds     = require(argv.connection),                           // load the JSON specified in the argument
   client    = redis.createClient(creds);                          // create a Redis client with the Node_redis connection object
