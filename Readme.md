@@ -16,7 +16,16 @@ If you are upgrading from Reds, you'll need to make your `createSearch` asynchro
 The first thing you'll want to do is create a `Search` instance, which allows you to pass a `key`, used for namespacing within RediSearch so that you may have several searches in the same Redis database. You may specify your own [node_redis](https://github.com/NodeRedis/node_redis) instance with the `redslight.setClient` function.
 
 ```js
-redslight.createSearch('pets',{}, function(err, search) {
+var schema = {
+  name: {
+    type: 'text'
+  }
+};
+var options = {
+  stopWords: ['oops'],
+  output: 'beautify'
+};
+redslight.createSearch('pets', schema, options, function(err, search) {
   /* ... */
 });
 ```
@@ -24,17 +33,25 @@ redslight.createSearch('pets',{}, function(err, search) {
 You can then add items to the index with the `Search#index` function.
 
 ```js
-var strs = [];
-strs.push('Tobi wants four dollars');
-strs.push('Tobi only wants $4');
-strs.push('Loki is really fat');
-strs.push('Loki, Jane, and Tobi are ferrets');
-strs.push('Manny is a cat');
-strs.push('Luna is a cat');
-strs.push('Mustachio is a cat');
+var schema = {
+  name: {
+    type: 'text'
+  }
+};
+var options = {
+  output: 'beautify'
+};
+var data = [];
+data.push({ name: 'Tobi wants four dollars' });
+data.push({ name: 'Tobi only wants $4' });
+data.push({ name: 'Loki is really fat' });
+data.push({ name: 'Loki, Jane, and Tobi are ferrets' });
+data.push({ name: 'Manny is a cat' });
+data.push({ name: 'Luna is a cat' });
+data.push({ name: 'Mustachio is a cat' });
 
-redslight.createSearch('pets',{}, function(err,search) {
-  strs.forEach(function(str, i){ search.index(str, i); });
+redslight.createSearch('pets', schema, {}, function(err, search) {
+  data.forEach(function(item, index) { search.index(index, item); });
 });
 ```
 
@@ -43,12 +60,9 @@ redslight.createSearch('pets',{}, function(err,search) {
 ```js
 search
   .query('Tobi dollars')
-  .end(function(err, ids){
+  .end(function(err, resp){
     if (err) throw err;
-    console.log('Search results for "%s":', query);
-    ids.forEach(function(id){
-      console.log('  - %s', strs[id]);
-    });
+    console.log('Response', resp)
   });
   ```
 
@@ -65,12 +79,9 @@ Search results for "Tobi dollars":
 search
   .query('tobi dollars')
   .type('or')
-  .end(function(err, ids){
+  .end(function(err, resp){
     if (err) throw err;
-    console.log('Search results for "%s":', query);
-    ids.forEach(function(id){
-      console.log('  - %s', strs[id]);
-    });
+    console.log('Response', resp)
   });
 ```
 
@@ -89,8 +100,9 @@ RediSearch has an advanced query syntax that can be used by using the 'direct' s
 search
   .query('(hello|hella) (world|werld)')
   .type('direct')
-  .end(function(err, ids){
-    /* ... */
+  .end(function(err, resp){
+    if (err) throw err;
+    console.log('Response', resp)
   });
 ```
 
@@ -98,10 +110,10 @@ Also included in the package is the RediSearch Suggestion API. This has no corol
 ```js
 search
   .query('(hello|hella) (world|werld)')
-  
   .type('direct')
-  .end(function(err, ids){
-    /* ... */
+  .end(function(err, resp){
+    if (err) throw err;
+    console.log('Response', resp)
   });
 ```
 
@@ -148,6 +160,7 @@ There is also a `fuzzy` opt and `maxResults` that can either be set by chaining 
 
 ```js
 redslight.createSearch(key, options, fn) : Search
+redslight.dropSearch(key, options, fn) : Search
 redslight.setClient(inClient)
 redslight.createClient()
 redslight.confirmModule(cb)
@@ -170,11 +183,11 @@ Suggestion#del(str,fn)
  Examples:
 
 ```js
-var search = redslight.createSearch('misc');
-search.index('Foo bar baz', 'abc');
-search.index('Foo bar', 'bcd');
-search.remove('bcd');
-search.query('foo bar').end(function(err, ids){});
+redslight.createSearch('pets', schema, {}, function(err, search) {
+  search.index('dog', { name: 'Tobbi' });
+  search.remove('dog');
+  search.query('Tobbi').end(function (err, resp) {});
+});
 ```
 
 
