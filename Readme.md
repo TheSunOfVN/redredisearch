@@ -1,6 +1,6 @@
-# RedRediSearch
+# RedsLight
 
-  RedRediSearch is a Node.js wrapper library for the [RediSearch](http://redisearch.io/) Redis module. It is more-or-less syntactically compatible with [Reds](https://github.com/tj/reds), another Node.js search library. RedRediSearch and RediSearch can provide full-text searching that is much faster than the original Reds library (see Benchmarks).
+  Redslight is a light-weight redis search for Node.js. It can provide full-text searching that is much faster than the original Reds library (see Benchmarks).
   
    
 ## Upgrading
@@ -9,14 +9,14 @@ If you are upgrading from Reds, you'll need to make your `createSearch` asynchro
 
 ## Installation
 
-      $ npm install redredisearch
+      $ npm install redslight
 
 ## Example
 
-The first thing you'll want to do is create a `Search` instance, which allows you to pass a `key`, used for namespacing within RediSearch so that you may have several searches in the same Redis database. You may specify your own [node_redis](https://github.com/NodeRedis/node_redis) instance with the `redredisearch.setClient` function.
+The first thing you'll want to do is create a `Search` instance, which allows you to pass a `key`, used for namespacing within RediSearch so that you may have several searches in the same Redis database. You may specify your own [node_redis](https://github.com/NodeRedis/node_redis) instance with the `redslight.setClient` function.
 
 ```js
-redredisearch.createSearch('pets',{}, function(err, search) {
+redslight.createSearch('pets',{}, function(err, search) {
   /* ... */
 });
 ```
@@ -33,7 +33,7 @@ strs.push('Manny is a cat');
 strs.push('Luna is a cat');
 strs.push('Mustachio is a cat');
 
-redredisearch.createSearch('pets',{}, function(err,search) {
+redslight.createSearch('pets',{}, function(err,search) {
   strs.forEach(function(str, i){ search.index(str, i); });
 });
 ```
@@ -59,7 +59,7 @@ Search results for "Tobi dollars":
   - Tobi wants four dollars
 ```
 
- We can tweak the query to perform a union by passing either "union" or "or" to `Search#type()` in `redredisearch.search()` between `Search#query()` and `Search#end()`, indicating that _any_ of the constants computed may be present for the `id` to match.
+ We can tweak the query to perform a union by passing either "union" or "or" to `Search#type()` in `redslight.search()` between `Search#query()` and `Search#end()`, indicating that _any_ of the constants computed may be present for the `id` to match.
 
 ```js
 search
@@ -95,9 +95,18 @@ search
 ```
 
 Also included in the package is the RediSearch Suggestion API. This has no corollary in the Reds module. The Suggestion API is ideal for auto-complete type situations and is entirely separate from the Search API. 
+```js
+search
+  .query('(hello|hella) (world|werld)')
+  
+  .type('direct')
+  .end(function(err, ids){
+    /* ... */
+  });
+```
 
 ```js
-var suggestions = redredisearch.suggestion('my-suggestion-list');
+var suggestions = redslight.suggestion('my-suggestion-list');
 
 suggestions.add(
   'redis',                                            // add 'redis'
@@ -138,12 +147,12 @@ There is also a `fuzzy` opt and `maxResults` that can either be set by chaining 
 ## API
 
 ```js
-redredisearch.createSearch(key, options, fn) : Search
-redredisearch.setClient(inClient)
-redredisearch.createClient()
-redredisearch.confirmModule(cb)
-redredisearch.words(str) : Array
-redredisearch.suggestionList(key,opts) : Suggestion
+redslight.createSearch(key, options, fn) : Search
+redslight.setClient(inClient)
+redslight.createClient()
+redslight.confirmModule(cb)
+redslight.words(str) : Array
+redslight.suggestionList(key,opts) : Suggestion
 Search#index(text, id[, fn])
 Search#remove(id[, fn]);
 Search#query(text, fn[, type]) : Query
@@ -161,7 +170,7 @@ Suggestion#del(str,fn)
  Examples:
 
 ```js
-var search = redredisearch.createSearch('misc');
+var search = redslight.createSearch('misc');
 search.index('Foo bar baz', 'abc');
 search.index('Foo bar', 'bcd');
 search.remove('bcd');
@@ -171,7 +180,7 @@ search.query('foo bar').end(function(err, ids){});
 
 ## Benchmarks
 
-When compared to Reds, RedRediSearch is much faster at indexing and somewhat faster at query:
+When compared to Reds, redslight is much faster at indexing and somewhat faster at query:
 
 _Indexing - documents / second_
 
@@ -185,7 +194,7 @@ _Query - queries / second_
 | Module         | 1 term | 2 terms / AND | 2 terms / OR | 3 terms / AND | 3 terms / OR | Long* / AND | Long* / OR | 
 |----------------|--------|---------------|--------------|---------------|--------------|------------|----------|
 | Reds           | 8,754  | 8,765         | 8,389        | 7,622         | 7,193        | 1,649      | 1,647 |
-| RedRediSearch  | 10,955 | 12,945        | 10,054       | 12,769        | 8,389        | 6,456      | 12,311 |
+| redslight  | 10,955 | 12,945        | 10,054       | 12,769        | 8,389        | 6,456      | 12,311 |
 
 The "Long" query string is taken from the Canadian Charter of Rights and Freedoms: "Everyone has the following fundamental freedoms: (a) freedom of conscience and religion;  (b) freedom of thought, belief, opinion and expression, including freedom of the press and other media of communication; (c) freedom of peaceful assembly; and (d) freedom of association." (Used because I just had it open in another tab...)
 
@@ -200,9 +209,10 @@ The "Long" query string is taken from the Canadian Charter of Rights and Freedom
 
 (The MIT License)
 
-Copyright (c) 2011 TJ Holowaychuk &lt;tj@vision-media.ca&gt;
-Modified work Copyright (c) 2017 Kyle Davis
-Modified work Copyright (c) 2018 Thinh Nguyen
+- Original work Copyright(c) 2011 TJ Holowaychuk <tj@vision-media.ca>
+- Modified work Copyright(c) 2017 Kyle Davis
+- Modified work Copyright(c) 2018 Thinh Nguyen <thesunofvn@gmail.com>
+- Modified work Copyright(c) 2019 Vu Chau
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

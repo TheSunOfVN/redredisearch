@@ -1,3 +1,7 @@
+0.1.4 / Nov 2019
+==================
+  * Added beautifying response data
+  
 0.1.3 / Oct 2019
 ==================
   * Added dropping an index

@@ -1,7 +1,7 @@
 {
-  "name": "redredisearch",
-  "version": "0.1.3",
-  "description": "Redis search for node.js powered by the RediSearch module",
+  "name": "redslight",
+  "version": "0.1.4",
+  "description": "Redslight is a light-weight redis search for Node.js, designed to search with redis via commands",
   "keywords": [
     "redis",
     "search",
@@ -14,6 +14,6 @@
   "main": "index",
   "repository": {
     "type": "git",
-    "url": "https://github.com/thinhnguyen-agilityio/redredisearch"
+    "url": "https://github.com/thesunofvn/redslight"
   }
 }
