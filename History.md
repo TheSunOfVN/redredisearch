@@ -1,6 +1,6 @@
 0.1.5 / Nov 2019
 ==================
-  * Fix bug beautifying response data from getting single record
+  * Fix bug parsing data
 
 0.1.4 / Nov 2019
 ==================
