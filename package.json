@@ -1,6 +1,6 @@
 {
   "name": "redslight",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Redslight is a light-weight redis search for Node.js, designed to search with redis via commands",
   "keywords": [
     "redis",
