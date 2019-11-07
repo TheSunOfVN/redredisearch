@@ -18,7 +18,7 @@ The first thing you'll want to do is create a `Search` instance, which allows yo
 ```js
 var schema = {
   name: {
-    type: 'text'
+    type: 'text'          // Enum of data type: `text`, `numeric`, `geo`, `tag`
   }
 };
 var options = {
