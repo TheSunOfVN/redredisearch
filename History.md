@@ -1,10 +1,12 @@
-0.1.5 / Nov 2019
+0.2.0 / Nov 2019
 ==================
-  * Fix bug parsing data
+  * Add temporary in creating index
+  * Add paging and sorting
+  * Add schema defination of index and validation
 
 0.1.4 / Nov 2019
 ==================
-  * Added beautifying response data
+  * Added data parser to beautify response data
 
 0.1.3 / Oct 2019
 ==================
